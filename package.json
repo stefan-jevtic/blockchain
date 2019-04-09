@@ -1,0 +1,24 @@
+{
+  "name": "blockchain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "node_1": "nodemon --watch dev -e js dev/networkNode.js 3012 http://localhost:3012",
+    "node_2": "nodemon --watch dev -e js dev/networkNode.js 3013 http://localhost:3013",
+    "node_3": "nodemon --watch dev -e js dev/networkNode.js 3014 http://localhost:3014",
+    "node_4": "nodemon --watch dev -e js dev/networkNode.js 3015 http://localhost:3015",
+    "node_5": "nodemon --watch dev -e js dev/networkNode.js 3016 http://localhost:3016"
+  },
+  "author": "Stefan Jevtic",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "nodemon": "^1.18.11",
+    "request": "^2.88.0",
+    "sha256": "^0.2.0",
+    "uuid": "^3.3.2"
+  }
+}

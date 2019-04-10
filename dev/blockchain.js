@@ -1,6 +1,7 @@
 "use strict";
 
 const sha256 = require('sha256');
+const uuid = require('uuid');
 
 class Blockchain {
     constructor(){
@@ -33,13 +34,17 @@ class Blockchain {
 
     createNewTransaction(amount, sender, recipient){
         const newTransaction = {
+            transactionId: uuid().split('-').join(''),
             amount,
             sender,
             recipient
         }
 
-        this.pendingTransactions.push(newTransaction);
+        return newTransaction;
+    }
 
+    addTransactionToPendingTransactions(transactionObj){
+        this.pendingTransactions.push(transactionObj);
         return this.getLastBlock()['index'] + 1;
     }
 
@@ -57,6 +62,27 @@ class Blockchain {
             hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
         }
         return nonce;
+    }
+
+    chainIsValid(blockchain){
+        for(let i = 1; i < blockchain.length; i++) {
+            const currentBlock = blockchain[i];
+            const previousBlock = blockchain[i-1];
+            const blockHash = this.hashBlock(previousBlock.hash, {transactions: currentBlock.transactions, index: currentBlock.index}, currentBlock.nonce )
+            if(blockHash.substring(0, 4) !== '0000')
+                return false;
+            if(currentBlock.previousBlockHash !== previousBlock.hash)
+                return false;
+        }
+        const genesis = blockchain[0];
+        const correctNonce = genesis.nonce === 100;
+        const correctPreviousBlockHash = genesis.previousBlockHash === '0';
+        const correctHash = genesis.hash === '0'
+        const correctTransactions = genesis.transactions.length === 0;
+        if(!correctNonce || !correctPreviousBlockHash || !correctHash || !correctTransactions)
+            return false;
+
+        return true;
     }
 }
 
